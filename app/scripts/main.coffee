@@ -31,18 +31,25 @@ require ['backbone', 'appView', 'todoItemView'], (Backbone, AppView, TodoItemVie
       'items/:id': 'items'
       '*other': 'default'
 
+    # REVIEW: это что за jquery-style? сколько раз на файле упомянается $('.content-block')[0]?
     index: ->
       $($('.content-block')[0]).html('')
       $($('.content-block')[0]).append(appView.$el)
 
+
+    # REVIEW: что-то не понял, как из приложения попасть на такой роут
     items: (id)->
+      # REVIEW: такоя проверка не канает, даже сейчас(она не работает, если что-то удалено)
+      # REVIEW: лучше проверять реальный факт, а именно существование модели
       if(+id - 1 < appView.collection.models.length && +id)
         $($('.content-block')[0]).html('')
+        # REVIEW: так искать модель тоже не стоит, для этого существуют специальные методы
         itemView = new TodoItemView model: appView.collection.models[+id - 1]
         $($('.content-block')[0]).append(itemView.render().$el)
       else
         $($('.content-block')[0]).html('Страница не найдена')
 
+      # REVIEW: дублирование
       default: (other)->
         $($('.content-block')[0]).html('Страница не найдена')
 

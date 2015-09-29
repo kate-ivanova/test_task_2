@@ -4,6 +4,7 @@ define ['backbone', 'todoModel', 'backbone.localStorage'], (Backbone, TodoModel,
 
     localStorage: new Backbone.LocalStorage "todolist-filtered-backbone"
 
+    # REVIEW: очень похоже на то, что ты хотела использовать модель, но забыла об этом
     filters:
       title: ''
       done: 'all'
@@ -14,6 +15,7 @@ define ['backbone', 'todoModel', 'backbone.localStorage'], (Backbone, TodoModel,
       @listenTo @originalCollection, 'change', @sync
       @sync()
 
+    # REVIEW: очень важно, но без подсказок. сделай этот метод короче и понятней
     sync: ()->
       models = _.filter(@originalCollection.models, (item)=>
         if(!@hasTitleFilter() && !@hasDoneFilter())
