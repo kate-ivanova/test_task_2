@@ -1,0 +1,11 @@
+<!DOCTYPE html> <html class=no-js> <head> <meta charset=utf-8> <title>Менеджер задач</title> <meta name=description> <meta name=viewport content="width=device-width, initial-scale=1">  <link rel=stylesheet href=main.css> </head> <body> <!--[if lt IE 10]>
+ <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+ <![endif]--> <div class=header-block> <h3 class=text-muted>Менеджер задач</h3> </div> <div class=content-block></div> <div class=footer-block></div>  <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='//www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+      
+    </script> <script data-main=./scripts/main.js src=./bower_components/requirejs/require.js></script>  <script id=todoItem type=text/template> <input data-js-todo-done type="checkbox" class="todo-item--done"> <div data-js-todo-title class="todo-item--title"><%= title%></div> <input type="text" data-js-todo-edit-title class="todo-item--edit-title hidden"> <button data-js-todo-delete class="todo-item--delete">x</button> <button data-js-todo-edit class="todo-item--edit">&#9998;</button> </script> <script id=IndexPage type=text/template> <div data-js-todo-add class="todo-add-block"> <input data-js-todo-add-title placeholder="Новая задача" class="todo-add-block--title"> <button data-js-todo-add-submit class="todo-add-block--submit">Добавить</button> </div> <div data-js-todo-filter class="todo-filter-block"> <input data-js-todo-filter-title placeholder="Фильтр по названию" class="todo-filter-block--title"><br> <div>Показывать:</div> <select data-js-todo-filter-done class="todo-filter-block--done"> <option selected value="all">все</option> <option value="true">выполненные</option> <option value="false">не выполненные</option> </select> </div> <div data-js-todo-list-block class="todo-list-block"> <div class="todo-list-block--name">Список задач</div> <div data-js-todo-list class="todo-list-block--content"></div> </div> </script> </body> </html>
