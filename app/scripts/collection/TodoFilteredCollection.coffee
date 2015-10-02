@@ -1,5 +1,10 @@
-define ['backbone', 'todoModel', 'backbone.localStorage'], (Backbone, TodoModel, localStorage) ->
+define (require, exports, module) ->
+  Backbone = require 'backbone'
+  TodoModel = require 'todoModel'
+  localStorage = require 'backbone.localStorage'
+
   TodoFilteredCollection = Backbone.Collection.extend
+
     model: TodoModel
 
     localStorage: new Backbone.LocalStorage "todolist-filtered-backbone"
@@ -25,6 +30,7 @@ define ['backbone', 'todoModel', 'backbone.localStorage'], (Backbone, TodoModel,
                 ('' + item.get('done')) == @filters.done)
             else
               return ((item.get 'title').toLowerCase().indexOf(@filters.title.toLowerCase()) >= 0)
+              return ((item.get 'title').toLowerCase().indexOf(title.toLowerCase()) >= 0)
           else
             if(@hasDoneFilter())
               return (('' + item.get('done') == @filters.done))
@@ -40,8 +46,8 @@ define ['backbone', 'todoModel', 'backbone.localStorage'], (Backbone, TodoModel,
 
     setTitleFilter: (title)->
       @filters.title = title
-      @sync('title')
+      @sync()
 
     setDoneFilter: (done)->
       @filters.done = done
-      @sync('done')
+      @sync()

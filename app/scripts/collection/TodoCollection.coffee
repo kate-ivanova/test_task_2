@@ -1,4 +1,8 @@
-define ['backbone', 'todoModel', 'backbone.localStorage'], (Backbone, TodoModel, localStorage) ->
+define (require, exports, module) ->
+  Backbone = require 'backbone'
+  TodoModel = require 'todoModel'
+  localStorage = require 'backbone.localStorage'
+
   TodoCollection = Backbone.Collection.extend
     model: TodoModel
 

@@ -1,4 +1,6 @@
-define ['backbone'], (Backbone)->
+define (require, exports, module) ->
+  Backbone = require 'backbone'
+
   TodoModel = Backbone.Model.extend
     defaults:
       title: 'Новая задача'

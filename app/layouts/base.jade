@@ -7,10 +7,6 @@ html.no-js
     meta(name='viewport' content='width=device-width, initial-scale=1')
     // Place favicon.ico and apple-touch-icon.png in the root directory
 
-    // build:css styles/vendor.css
-    // bower:css
-    // endbower
-    // endbuild
     block styles
 
   body
@@ -29,15 +25,7 @@ html.no-js
       r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
       ga('create','UA-XXXXX-X');ga('send','pageview');
 
-    // build:js scripts/vendor.js
-    //- script(src='/bower_components/modernizr/modernizr.js')
-    //- script(src='/bower_components/jquery/dist/jquery.js')
-    //- script(src='/bower_components/underscore/underscore.js')
-    //- script(src='/bower_components/backbone/backbone.js')
-    //- script(src='/bower_components/backbone.localStorage/backbone.localStorage.js')
-    //- script(src='/bower_components/backbone.validation/dist/backbone-validation.js')
-    script(data-main='./scripts/main.js' src='/bower_components/requirejs/require.js')
-    // endbuild
+    script(data-main='./scripts/main.js' src='./bower_components/requirejs/require.js')
 
     block scripts
 
