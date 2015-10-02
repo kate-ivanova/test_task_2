@@ -51,3 +51,8 @@ define (require, exports, module) ->
     setDoneFilter: (done)->
       @filters.done = done
       @sync()
+
+    setFilters: (filters)->
+      @setTitleFilter filters.title if filters.title
+      @setDoneFilter filters.done if filters.done
+

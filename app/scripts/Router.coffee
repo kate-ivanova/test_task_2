@@ -22,10 +22,10 @@ define (require, exports, module) ->
 
     index: (str)->
       urlArgs = getUrlArgs()
-      window.common.app.showPage window.common.app.pages.IndexPage urlArgs
+      window.common.app.showPage window.common.app.pages.IndexPage, urlArgs
 
     items: (id)->
-      window.common.app.showPage window.common.app.pages.TodoItemPage id
+      window.common.app.showPage window.common.app.pages.TodoItemPage, id
 
     notFoundPage: (other)->
       window.common.app.showPage window.common.app.NotFoundPage()

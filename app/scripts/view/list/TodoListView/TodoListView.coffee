@@ -1,15 +1,18 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
+  require 'backbone.epoxy'
   TodoItemView = require 'todoItemView'
-  common = require 'common'
   $ = Backbone.$
 
-  TodoListView = Backbone.View.extend
+  TodoListView = Backbone.Epoxy.View.extend
+    ui:
+      $title: $('[data-js-todo-title]')
 
     events:
       'click [data-js-todo-title]': 'showItemPage'
 
-    initialize: ->
+    setCollection: (collection)->
+      @collection = collection
       @listenTo @collection, 'update', @render
 
     render: ->

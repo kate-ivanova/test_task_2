@@ -1,85 +1,47 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-  BackboneMixin = require 'backbone-mixin'
   TodoCollection = require 'todoCollection'
   TodoFilteredCollection = require 'todoFilteredCollection'
   TodoListView = require 'todoListView'
+  AddTodoWidget = require 'view/widget/AddTodoWidget/AddTodoWidget'
+  FilterTodoWidget = require 'view/widget/FilterTodoWidget/FilterTodoWidget'
   $ = Backbone.$
 
-  IndexPage = BackboneMixin(Backbone.Epoxy.View).extend
+  IndexPage = Backbone.Epoxy.View.extend
     className: 'app-block'
 
-    template: '#IndexPage'
+    template: $('#IndexPage').html()
 
-    filters:
-      title: ''
-      done: 'all'
+    regions:
+      addTodo:
+        el: '[data-js-todo-add]'
+        view: AddTodoWidget
+      filterTodo:
+        el: '[data-js-todo-filter]'
+        view: FilterTodoWidget
+      todoList:
+        el: '[data-js-todo-list]'
+        view: TodoListView
 
-    ui:
-      todoList: '[data-js-todo-list]'
-      newTodoTitle: '[data-js-todo-add-title]'
-      doneFilter: '[data-js-todo-filter-done]'
-      titleFilter: '[data-js-todo-filter-title]'
-      todoAddButton: '[data-js-todo-add-submit]'
-
-    events:
-      'click [data-js-todo-add-submit]': 'onAddClick'
-      'keypress [data-js-todo-add-title]': 'onAddTitleKeypress'
-      'input [data-js-todo-filter-title]': 'onTitleFilterInput'
-      'change [data-js-todo-filter-done]': 'onDoneFilterChange'
-
-    initialize: (options) ->
-      @collection = new TodoCollection()
+    initialize: ->
       @filteredCollection = new TodoFilteredCollection null, originalCollection: @collection
-      if options.title
-        @filters.title = options.title
-        @filteredCollection.setTitleFilter @filters.title
-      if options.done
-        @filters.done = options.done
-        @filteredCollection.setDoneFilter @filters.done
+      @initializeRegions()
 
-    render: ->
-      @todoListView = new TodoListView collection: @filteredCollection
-      @ui.todoList.append @todoListView.render().$el
-      if @filters.title
-        @ui.titleFilter.val @filters.title
-      if @filters.done
-        @ui.doneFilter.val @filters.done
-      this
+    initializeRegions: ->
+      regionsKeys = _.keys @regions
+      _.each @regions, (region, key)=>
+        @regions[key] = new @regions[key].view
+      @regions.addTodo.collection = @collection
+      @regions.filterTodo.collection = @filteredCollection
+      @regions.todoList.setCollection @filteredCollection
 
-    onAddClick: ->
-      @addTodoItem @ui.newTodoTitle.val()
-      @ui.newTodoTitle.val ''
+    render:->
+      @$el.html @template
+      _.each @regions, (region)=>
+        region.render()
 
-    onAddTitleKeypress: (e)->
-      @onAddClick() if (e.keyCode == 13)
+    setAttributes: (filters) ->
+      @regions.filterTodo.setFilters filters if filters
 
-    onTitleFilterInput: (e) ->
-      @filters.title = $(e.target).val()
-      @filteredCollection.setTitleFilter @filters.title
-      @updateRoute()
 
-    onDoneFilterChange: (e) ->
-      @filters.done = $(e.target).val()
-      @filteredCollection.setDoneFilter @filters.done
-      @updateRoute()
-
-    addTodoItem: (title)->
-       @collection.addNewItem title: title
-
-    setFilters: (filters)->
-      @filters = filters
-      @filteredCollection.setFilters @filters
-
-    updateRoute: ->
-      routeStr = ''
-      if @filters.title
-        routeStr += '?title=' + @filters.title
-      if @filters.done && @filters.done != 'all'
-        if routeStr.length
-          routeStr += '&'
-        else
-          routeStr += '?'
-        routeStr += 'done=' + @filters.done
-      window.common.router.navigate routeStr

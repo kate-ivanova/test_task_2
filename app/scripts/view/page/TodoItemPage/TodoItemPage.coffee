@@ -4,10 +4,8 @@ define (require, exports, module) ->
   TodoItemView = require 'todoItemView'
 
   TodoItemPage = Backbone.View.extend
-
-    initialize: (options)->
-      @collection = new TodoCollection()
-      @todoItem = @collection.get options.todoItemId
+    setAttributes: (attrs)->
+      @todoItem = @collection.get attrs.todoItemId
 
     render: ->
       todoItemView = new TodoItemView model: @todoItem

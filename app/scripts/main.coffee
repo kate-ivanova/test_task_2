@@ -6,7 +6,6 @@ require.config
     backbone: '../bower_components/backbone/backbone'
     'backbone.localStorage': '../bower_components/backbone.localStorage/backbone.localStorage'
     'backbone.epoxy': '../bower_components/backbone.epoxy/backbone.epoxy'
-    'backbone-mixin': '../bower_components/backbone-mixin/build/backbone-mixin'
     todoModel: 'model/TodoModel'
     todoCollection: 'collection/TodoCollection'
     todoFilteredCollection: 'collection/TodoFilteredCollection'
@@ -20,5 +19,6 @@ require.config
 
 require ['backbone', 'common', 'router', 'app'], (Backbone, common, Router, App)->
   window.common.app = new App
+  window.common.app.initialize()
   window.common.router = new Router
   Backbone.history.start()
