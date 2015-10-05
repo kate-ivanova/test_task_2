@@ -15,7 +15,6 @@ define (require, exports, module) ->
 
     initialize: (models, options)->
       @originalCollection = options.originalCollection
-      @listenTo @originalCollection, 'update', @sync
       @listenTo @originalCollection, 'change', @sync
       @sync()
 
@@ -37,6 +36,7 @@ define (require, exports, module) ->
         return false
       )
       @set models
+      @trigger 'sync'
 
     hasTitleFilter: ->
       return @filters.title.length
@@ -53,6 +53,12 @@ define (require, exports, module) ->
       @sync()
 
     setFilters: (filters)->
-      @setTitleFilter filters.title if filters.title
-      @setDoneFilter filters.done if filters.done
+      if filters.title
+        @setTitleFilter filters.title
+      else @setTitleFilter ''
+
+      if filters.done
+        @setDoneFilter filters.done
+      else @setDoneFilter 'all'
+
 

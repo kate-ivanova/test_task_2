@@ -13,12 +13,23 @@ define (require, exports, module) ->
       done: 'all'
 
     ui:
-      $title: $('[data-js-todo-title]')
-      $done: $('[data-js-todo-done]')
+      $title: '[data-js-todo-title]'
+      $done: '[data-js-todo-done]'
 
     events:
       'input [data-js-todo-title]': 'onTitleInput'
       'change [data-js-todo-done]': 'onDoneChange'
+
+    initialize: ->
+      @$el.html @template
+      @render()
+      @setUi()
+
+    setUi: ->
+      ui = {}
+      _.each @ui, (element, key)=>
+        ui[key] = @$(element)
+      @ui = ui
 
     onTitleInput: (e) ->
       @filters.title = $(e.target).val()

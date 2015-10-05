@@ -25,19 +25,24 @@ define (require, exports, module) ->
         view: TodoListView
 
     initialize: ->
+      @$el.html @template
       @filteredCollection = new TodoFilteredCollection null, originalCollection: @collection
+      # set collections for view
+      @regions.addTodo.collection = @collection
+      @regions.filterTodo.collection = @filteredCollection
+      @regions.todoList.collection = @filteredCollection
+      # render all
+      @render()
       @initializeRegions()
 
     initializeRegions: ->
-      regionsKeys = _.keys @regions
+      regions = {}
       _.each @regions, (region, key)=>
-        @regions[key] = new @regions[key].view
-      @regions.addTodo.collection = @collection
-      @regions.filterTodo.collection = @filteredCollection
-      @regions.todoList.setCollection @filteredCollection
+        regions[key] = new @regions[key].view (el: @$(@regions[key].el), collection: @regions[key].collection)
+      @regions = regions
+      @renderRegions()
 
-    render:->
-      @$el.html @template
+    renderRegions:->
       _.each @regions, (region)=>
         region.render()
 

@@ -5,7 +5,8 @@ define (require, exports, module) ->
 
   TodoItemPage = Backbone.View.extend
     setAttributes: (attrs)->
-      @todoItem = @collection.get attrs.todoItemId
+      @todoItem = @collection.get attrs
+      @render() if @todoItem
 
     render: ->
       todoItemView = new TodoItemView model: @todoItem

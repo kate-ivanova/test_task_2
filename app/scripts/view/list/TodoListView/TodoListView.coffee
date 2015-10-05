@@ -5,15 +5,15 @@ define (require, exports, module) ->
   $ = Backbone.$
 
   TodoListView = Backbone.Epoxy.View.extend
-    ui:
-      $title: $('[data-js-todo-title]')
-
     events:
       'click [data-js-todo-title]': 'showItemPage'
 
-    setCollection: (collection)->
-      @collection = collection
-      @listenTo @collection, 'update', @render
+    initialize: ->
+      @render()
+      @listenTo @collection, 'sync', @render
+      # console.log @$('[data-js-todo-title]')
+      # @$el.on 'click', '[data-js-todo-title]',->
+      #   console.log 'clicked'
 
     render: ->
       @$el.html ''
@@ -30,10 +30,3 @@ define (require, exports, module) ->
     showItemPage: (e) ->
       itemId = $(e.currentTarget).parent().attr 'data-js-todo-id'
       window.common.router.navigate '/items/' + itemId, {trigger: true}
-
-
-
-
-
-
-

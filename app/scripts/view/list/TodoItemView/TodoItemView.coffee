@@ -9,12 +9,12 @@ define (require, exports, module) ->
     className: 'todo-item'
 
     ui:
-      $item: $('[data-js-todo-id]')
-      $title: $('[data-js-todo-title]')
-      $done: $('[data-js-todo-done]')
-      $editButton: $('[data-js-todo-edit]')
-      $editTitleInput: $('[data-js-todo-edit-title]')
-      $deleteButton: $('[data-js-todo-delete]')
+      $id: '[data-js-todo-id]'
+      $title: '[data-js-todo-title]'
+      $done: '[data-js-todo-done]'
+      $editTitleInput: '[data-js-todo-edit-title]'
+      $buttonDelete: '[data-js-todo-delete]'
+      $buttonEdit: '[data-js-todo-edit]'
 
     events:
       'click [data-js-todo-done]': 'onDoneClick'
@@ -29,8 +29,17 @@ define (require, exports, module) ->
       '[data-js-todo-edit-title]': 'value: title'
 
     initialize: ->
+      @$el.html @template
+      @render()
+      @setUi()
       @listenTo @model, 'change', @render
       @listenTo @model, 'destroy', @remove
+
+    setUi: ->
+      ui = {}
+      _.each @ui, (element, key)=>
+        ui[key] = @$(element)
+      @ui = ui
 
     onEditClick: ->
       @ui.$title.addClass 'hidden'

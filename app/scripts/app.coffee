@@ -8,6 +8,8 @@ define (require, exports, module) ->
   App = () ->
     $content: $($('.content-block')[0])
 
+    currPage: null
+
     pages:
       IndexPage: null
       TodoItemPage: null
@@ -18,7 +20,11 @@ define (require, exports, module) ->
       @pages.TodoItemPage = new TodoItemPage collection: collection
 
     showPage: (page, attrs) ->
-      page.setAttributes attrs
-      page.render()
-      @$content.html(page.$el)
+      if @currPage
+        debugger
+        @currPage.remove()
+        page.delegateEvents()
 
+      page.setAttributes attrs
+      @$content.html(page.$el)
+      @currPage = page

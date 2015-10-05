@@ -13,5 +13,6 @@ define (require, exports, module) ->
 
     addNewItem: (options)->
       @create(options)
+      @trigger 'change'
       this
 
