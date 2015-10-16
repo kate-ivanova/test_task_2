@@ -1,9 +1,10 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
-  TodoCollection = require 'todoCollection'
-  TodoItemView = require 'todoItemView'
+  require 'backbone.epoxy'
+  TodoItemView = require 'view/list/TodoItemView/TodoItemView'
 
-  TodoItemPage = Backbone.View.extend
+  TodoItemPage = Backbone.Epoxy.View.extend
+
     setAttributes: (attrs)->
       @todoItem = @collection.get attrs
       @render() if @todoItem
@@ -13,3 +14,8 @@ define (require, exports, module) ->
       todoItemView.render()
       $todoItemEl = todoItemView.$el
       @$el.html $todoItemEl
+      this
+
+    hide: -> @$el.toggleClass 'hide', true
+
+    show: -> @$el.toggleClass 'hide', false

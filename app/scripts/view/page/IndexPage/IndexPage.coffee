@@ -1,11 +1,11 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-  TodoCollection = require 'todoCollection'
-  TodoFilteredCollection = require 'todoFilteredCollection'
-  TodoListView = require 'todoListView'
+  TodoFilteredCollection = require 'collection/TodoFilteredCollection'
+  TodoListView = require 'view/list/TodoListView/TodoListView'
   AddTodoWidget = require 'view/widget/AddTodoWidget/AddTodoWidget'
   FilterTodoWidget = require 'view/widget/FilterTodoWidget/FilterTodoWidget'
+
   $ = Backbone.$
 
   IndexPage = Backbone.Epoxy.View.extend
@@ -48,5 +48,10 @@ define (require, exports, module) ->
 
     setAttributes: (filters) ->
       @regions.filterTodo.setFilters filters if filters
+
+    hide: -> @$el.toggleClass 'hide', true
+
+    show: -> @$el.toggleClass 'hide', false
+
 
 

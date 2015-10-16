@@ -1,6 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
+
   $ = Backbone.$
 
   FilterTodoWidget = Backbone.Epoxy.View.extend
@@ -41,21 +42,15 @@ define (require, exports, module) ->
 
     setFilters: (filters)->
       @filters = filters
-      @collection.setFilters @filters
-      if @filters.title
-        @ui.$title.val @filters.title
-      if @filters.done
-        @ui.$done.val @filters.done
+      @collection.setFilters @filters.title, @filters.done
+      @ui.$title.val @filters.title if @filters.title
+      @ui.$done.val @filters.done if @filters.done
       @updateRoute()
 
     updateRoute: ->
       routeStr = ''
-      if @filters.title
-        routeStr += '?title=' + @filters.title
-      if @filters.done && @filters.done != 'all'
-        if routeStr.length
-          routeStr += '&'
-        else
-          routeStr += '?'
+      routeStr += '?title=' + @filters.title if @filters.title
+      if @filters.done and @filters.done != 'all'
+        routeStr += if routeStr.length then '&' else '?'
         routeStr += 'done=' + @filters.done
       window.common.router.navigate routeStr

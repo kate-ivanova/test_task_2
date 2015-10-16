@@ -1,7 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-  TodoCollection = require 'todoCollection'
+
   $ = Backbone.$
 
   AddTodoWiget = Backbone.Epoxy.View.extend
@@ -29,9 +29,6 @@ define (require, exports, module) ->
       @addTodoItem @ui.$title.val()
       @ui.$title.val ''
 
-    onTitleKeypress: (e)->
-      if (e.keyCode == 13)
-        @onAddClick()
+    onTitleKeypress: (e)-> @onAddClick() if e.keyCode == 13
 
-    addTodoItem: (title)->
-      @collection.addNewItem title: title
+    addTodoItem: (title)-> @collection.addNewItem title: title

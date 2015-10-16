@@ -1,7 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-  TodoItemView = require 'todoItemView'
+  TodoItemView = require 'view/list/TodoItemView/TodoItemView'
   $ = Backbone.$
 
   TodoListView = Backbone.Epoxy.View.extend
@@ -11,9 +11,6 @@ define (require, exports, module) ->
     initialize: ->
       @render()
       @listenTo @collection, 'sync', @render
-      # console.log @$('[data-js-todo-title]')
-      # @$el.on 'click', '[data-js-todo-title]',->
-      #   console.log 'clicked'
 
     render: ->
       @$el.html ''

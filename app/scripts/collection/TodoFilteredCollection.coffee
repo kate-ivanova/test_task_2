@@ -1,6 +1,6 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
-  TodoModel = require 'todoModel'
+  TodoModel = require 'model/TodoModel'
   localStorage = require 'backbone.localStorage'
 
   TodoFilteredCollection = Backbone.Collection.extend
@@ -19,30 +19,10 @@ define (require, exports, module) ->
       @sync()
 
     sync: ()->
-      models = _.filter(@originalCollection.models, (item)=>
-        if(!@hasTitleFilter() && !@hasDoneFilter())
-          return true
-        else
-          if(@hasTitleFilter())
-            if(@hasDoneFilter())
-              return (((item.get 'title').toLowerCase().indexOf(@filters.title.toLowerCase()) >= 0) &&
-                ('' + item.get('done')) == @filters.done)
-            else
-              return ((item.get 'title').toLowerCase().indexOf(@filters.title.toLowerCase()) >= 0)
-              return ((item.get 'title').toLowerCase().indexOf(title.toLowerCase()) >= 0)
-          else
-            if(@hasDoneFilter())
-              return (('' + item.get('done') == @filters.done))
-        return false
-      )
+      models = _.filter @originalCollection.models, (item) =>
+        item.isMatchFilters @filters.title, @filters.done
       @set models
       @trigger 'sync'
-
-    hasTitleFilter: ->
-      return @filters.title.length
-
-    hasDoneFilter: ->
-      return (@filters.done != 'all')
 
     setTitleFilter: (title)->
       @filters.title = title
@@ -52,13 +32,8 @@ define (require, exports, module) ->
       @filters.done = done
       @sync()
 
-    setFilters: (filters)->
-      if filters.title
-        @setTitleFilter filters.title
-      else @setTitleFilter ''
-
-      if filters.done
-        @setDoneFilter filters.done
-      else @setDoneFilter 'all'
+    setFilters: (title='', done='all')->
+      @setTitleFilter title
+      @setDoneFilter done
 
 

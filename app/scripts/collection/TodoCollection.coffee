@@ -1,6 +1,6 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
-  TodoModel = require 'todoModel'
+  TodoModel = require 'model/TodoModel'
   localStorage = require 'backbone.localStorage'
 
   TodoCollection = Backbone.Collection.extend
@@ -8,11 +8,10 @@ define (require, exports, module) ->
 
     localStorage: new Backbone.LocalStorage "todolist-backbone"
 
-    initialize: ->
-      @fetch()
+    initialize: -> @fetch()
 
     addNewItem: (options)->
-      @create(options)
+      @create options
       @trigger 'change'
       this
 

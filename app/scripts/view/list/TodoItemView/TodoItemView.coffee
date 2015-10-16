@@ -1,6 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
+
   $ = Backbone.$
 
   TodoItemView = Backbone.Epoxy.View.extend
@@ -21,6 +22,7 @@ define (require, exports, module) ->
       'click [data-js-todo-delete]': 'onDeleteClick'
       'click [data-js-todo-edit]': 'onEditClick'
       'keypress [data-js-todo-edit-title]': 'onEditTitleKeypress'
+      'blur [data-js-todo-edit-title]': 'onEditTitleBlur'
 
     bindings:
       '[data-js-todo-id]': "attr: {'data-js-todo-id': id}"
@@ -42,20 +44,18 @@ define (require, exports, module) ->
       @ui = ui
 
     onEditClick: ->
-      @ui.$title.addClass 'hidden'
-      @ui.$editTitleInput.removeClass 'hidden'
+      @ui.$title.toggleClass 'hidden', true
+      @ui.$editTitleInput.toggleClass 'hidden', false
 
-    onEditTitleKeypress: (e)->
-      if (e.keyCode == 13)
-        @model.changeTitle @ui.$editTitleInput.val()
-        @ui.$title.removeClass 'hidden'
-        @ui.$editTitleInput.addClass 'hidden'
+    onEditTitleKeypress: (e)-> @changeTitle() if (e.keyCode == 13)
 
-    onDoneClick: (e)->
-      @model.toggle()
+    onEditTitleBlur: -> @changeTitle()
 
-    onDeleteClick: ->
-      @model.destroy()
+    changeTitle: ->
+      @model.changeTitle @ui.$editTitleInput.val()
+      @ui.$title.toggleClass 'hidden', false
+      @ui.$editTitleInput.toggleClass 'hidden', true
 
-    remove: ->
-      @$el.remove()
+    onDoneClick: (e)-> @model.toggle()
+
+    onDeleteClick: -> @model.destroy()

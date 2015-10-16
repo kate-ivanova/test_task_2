@@ -25,9 +25,8 @@ define (require, exports, module) ->
       window.common.app.showPage window.common.app.pages.IndexPage, urlArgs
 
     items: (id)->
-      console.log id
       window.common.app.showPage window.common.app.pages.TodoItemPage, id
 
     notFoundPage: (other)->
-      window.common.app.showPage window.common.app.NotFoundPage()
+      window.common.app.showPage window.common.app.pages.NotFoundPage
 
