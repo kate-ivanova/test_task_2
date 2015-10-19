@@ -9,31 +9,22 @@ define (require, exports, module) ->
 
     localStorage: new Backbone.LocalStorage "todolist-filtered-backbone"
 
-    filters:
-      title: ''
-      done: 'all'
-
     initialize: (models, options)->
       @originalCollection = options.originalCollection
       @listenTo @originalCollection, 'change', @sync
       @sync()
 
-    sync: ()->
+    sync: (title='', done='all')->
       models = _.filter @originalCollection.models, (item) =>
-        item.isMatchFilters @filters.title, @filters.done
+        item.isMatchFilters title, done
       @set models
       @trigger 'sync'
 
     setTitleFilter: (title)->
-      @filters.title = title
-      @sync()
+      @sync title
 
     setDoneFilter: (done)->
-      @filters.done = done
-      @sync()
+      @sync null, done
 
     setFilters: (title='', done='all')->
-      @setTitleFilter title
-      @setDoneFilter done
-
-
+      @sync title, done
