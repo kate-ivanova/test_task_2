@@ -1,5 +1,8 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
+  # REVIEW: не думаю, что в этом замечательном приложении нужны неймспейсы
+  # REVIEW: думаю, ты со мной согласишься, когда начнёшь писать тесты к нему
+  # REVIEW: давай избавимся от common
   common = require 'common'
 
   getUrlArgs = ()->
@@ -22,6 +25,7 @@ define (require, exports, module) ->
 
     index: (str)->
       urlArgs = getUrlArgs()
+      # REVIEW: оочень длинные строки
       window.common.app.showPage window.common.app.pages.IndexPage, urlArgs
 
     items: (id)->

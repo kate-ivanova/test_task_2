@@ -25,10 +25,13 @@ define (require, exports, module) ->
         ui[key] = @$(element)
       @ui = ui
 
+    # название не совсем правдивое
     onAddClick: ->
       @addTodoItem @ui.$title.val()
       @ui.$title.val ''
 
     onTitleKeypress: (e)-> @onAddClick() if e.keyCode == 13
 
+    # REVIEW: Вкусовщина : @collection.addNewItem {title} или
+    # хотябы @collection.addNewItem {title: title}
     addTodoItem: (title)-> @collection.addNewItem title: title

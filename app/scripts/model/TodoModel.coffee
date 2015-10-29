@@ -12,6 +12,8 @@ define (require, exports, module) ->
 
     changeTitle: (newTitle)-> @save title: newTitle
 
+    # фильтрацию лучше реализовывать на уровне коллекции
+    # по идее модель об этой части поведения должна знать минимум
     isMatchFilters: (titleFilter='', doneFilter='all')->
       titleFilterMatch = @isMatchTitleFilter titleFilter
       doneFilterMatch = @isMatchDoneFilter doneFilter

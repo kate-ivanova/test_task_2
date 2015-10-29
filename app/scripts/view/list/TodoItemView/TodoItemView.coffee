@@ -9,6 +9,8 @@ define (require, exports, module) ->
 
     className: 'todo-item'
 
+    # REVIEW: хорошо
+    # REVIEW: раз уж ты их засунула в ui, то $ им уже не нужен
     ui:
       $id: '[data-js-todo-id]'
       $title: '[data-js-todo-title]'
@@ -37,6 +39,7 @@ define (require, exports, module) ->
       @listenTo @model, 'change', @render
       @listenTo @model, 'destroy', @remove
 
+    # REVIEW: этот метод используется несколько раз, лучше вынести его в общего родителя
     setUi: ->
       ui = {}
       _.each @ui, (element, key)=>
@@ -44,6 +47,7 @@ define (require, exports, module) ->
       @ui = ui
 
     onEditClick: ->
+      # REVIEW: эти строчки дублируются ниже, было бы круто обощить это
       @ui.$title.toggleClass 'hidden', true
       @ui.$editTitleInput.toggleClass 'hidden', false
 

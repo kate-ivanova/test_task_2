@@ -49,6 +49,7 @@ define (require, exports, module) ->
 
     updateRoute: ->
       routeStr = ''
+      # REVIEW: string templates! http://coffeescript.org/#strings
       routeStr += '?title=' + @filters.title if @filters.title
       if @filters.done and @filters.done != 'all'
         routeStr += if routeStr.length then '&' else '?'
