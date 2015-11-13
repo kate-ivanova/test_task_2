@@ -6,11 +6,9 @@ define (require, exports, module) ->
       title: 'Новая задача'
       done: false
 
-    initialize: -> @save()
+    toggle: -> @set done: !@get 'done'
 
-    toggle: -> @save done: !@get 'done'
-
-    changeTitle: (newTitle)-> @save title: newTitle
+    changeTitle: (newTitle)-> @set title: newTitle
 
     # фильтрацию лучше реализовывать на уровне коллекции
     # по идее модель об этой части поведения должна знать минимум

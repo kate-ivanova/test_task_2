@@ -8,10 +8,11 @@ define (require, exports, module) ->
 
     localStorage: new Backbone.LocalStorage "todolist-backbone"
 
-    initialize: -> @fetch()
+    initialize: ->
+      # @fetch()
+      @listenTo this, 'change', @save
 
     addNewItem: (options)->
-      @create options
-      @trigger 'change'
+      @add options
       this
 
