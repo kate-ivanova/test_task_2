@@ -5,6 +5,7 @@ import browserSync from 'browser-sync';
 import del from 'del';
 import {stream as wiredep} from 'wiredep';
 
+const Server = require('karma').Server;
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
@@ -187,21 +188,31 @@ gulp.task('default', ['clean'], () => {
   gulp.start('build');
 });
 
-gulp.task('views', function () {
+gulp.task('views', () => {
   return gulp.src('app/*.jade')
     .pipe($.jade({pretty: true}))
     .pipe(gulp.dest('.tmp'))
     .pipe(reload({stream: true}));
 });
 
-gulp.task('deploy', ['build'], function () {
+gulp.task('deploy', ['build'], () => {
   return gulp.src('dist')
     .pipe($.subtree())
     .pipe($.clean());
 });
 
-gulp.task('scripts', function () {
+gulp.task('scripts', () => {
   return gulp.src('app/scripts/**/*.coffee')
     .pipe($.coffee())
     .pipe(gulp.dest('.tmp/scripts'));
+});
+
+/**
+ * Run test once and exit
+ */
+gulp.task('test', (done) => {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
 });
