@@ -3,12 +3,17 @@ define (require, exports, module) ->
 
   TodoModel = Backbone.Model.extend
     defaults:
-      title: 'Новая задача'
+      title: ''
       done: false
 
-    toggle: -> @set done: !@get 'done'
+    toggle: ->
+      @set done: !@get 'done'
 
-    changeTitle: (newTitle)-> @set title: newTitle
+    changeTitle: (newTitle)->
+      @set title: newTitle
+
+    validate: (attrs)->
+      'cannot have an empty title' if not attrs.title
 
     # фильтрацию лучше реализовывать на уровне коллекции
     # по идее модель об этой части поведения должна знать минимум
@@ -31,6 +36,3 @@ define (require, exports, module) ->
         done == doneFilter
       else
         true
-
-
-

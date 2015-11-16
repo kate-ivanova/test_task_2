@@ -8,20 +8,17 @@ module.exports = function(config) {
     basePath: '',
 
     plugins: [
-     'karma-mocha',
      'karma-requirejs',
-     // 'karma-coverage',
+     'karma-jasmine',
+     'karma-sinon',
+     'karma-mocha',
      'karma-coffee-preprocessor',
-     // 'karma-phantomjs-launcher',
-     'karma-chrome-launcher',
-     'karma-jasmine'
-     // 'karma-notify-reporter',
-     // 'karma-nyan-reporter'
+     'karma-chrome-launcher'
     ],
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['requirejs', 'sinon', 'jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
