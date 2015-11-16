@@ -3,7 +3,6 @@ define (require, exports, module) ->
   describe 'TodoModel', ->
     beforeEach ->
       @todoModel = new TodoModel
-      collection = {url: '/collection'}
       @todoModel.urlRoot = 'todolist-backbone'
 
     afterEach ->
