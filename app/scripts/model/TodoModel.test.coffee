@@ -23,9 +23,9 @@ define (require, exports, module) ->
       expect(@todoModel.get 'title').toEqual 'New title'
 
     it 'should not save when title is empty', ->
-      @eventSpy = sinon.spy()
-      @todoModel.listenTo @todoModel, 'invalid', @eventSpy
+      eventSpy = sinon.spy()
+      @todoModel.listenTo @todoModel, 'invalid', eventSpy
       @todoModel.save {'title': ''}
-      expect(@eventSpy.calledOnce).toBeTruthy()
-      expect(@eventSpy.calledWith @todoModel, 'cannot have an empty title')
+      expect(eventSpy.calledOnce).toBeTruthy()
+      expect(eventSpy.calledWith @todoModel, 'cannot have an empty title')
         .toBeTruthy()
