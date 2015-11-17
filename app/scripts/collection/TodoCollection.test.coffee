@@ -13,6 +13,7 @@ define (require, exports, module) ->
       # create new collection
       @todos = new TodoCollection
       @todos.model = @todoModelStub
+
       # stub interaction with localStorage
       @storageTodos = new Backbone.Collection
       @storageTodos.model = @todoModelStub
@@ -25,14 +26,24 @@ define (require, exports, module) ->
       expect(@todos).toBeDefined()
 
     it 'should correctly add item', ->
-      spy = sinon.spy(@todos, 'add')
+      spy = sinon.spy()
+      @todos.on 'change', spy
       prevLen = @todos.length
-      @todos.addNewItem {}
+      @todos.add {'title': 'title 1'}
       expect(spy.calledOnce).toBe true
-      expect(@todos.length).toBe prevLen + 1
+      expect(@todos.length).toBe(prevLen + 1)
+
+    it 'should correctly remove item', ->
+      @todos.add {'title': 'title 1'}
+      spy = sinon.spy()
+      @todos.on 'change', spy
+      prevLen = @todos.length
+      @todos.remove @todos.at(0)
+      expect(spy.calledOnce).toBe true
+      expect(@todos.length).toBe(prevLen - 1)
 
     it 'should yield to storage collection', ->
-      @todos.addNewItem {'title': 'title_1'}
+      @todos.add {'title': 'title_1'}
       expect(@storageTodos.models).toEqual @todos.models
 
     it 'should fetch from storage collection', ->

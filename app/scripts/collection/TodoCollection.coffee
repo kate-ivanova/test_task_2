@@ -10,12 +10,12 @@ define (require, exports, module) ->
 
     initialize: ->
       @fetch()
-      @listenTo this, 'change', @yield
+      @listenTo this, 'add', @change
+      @listenTo this, 'remove', @change
 
-    addNewItem: (options)->
-      @add options
+    change: ->
+      @trigger 'change'
       @yield()
-      this
 
     yield: ->
       @sync 'update', this

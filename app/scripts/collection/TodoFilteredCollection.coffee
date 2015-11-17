@@ -9,30 +9,30 @@ define (require, exports, module) ->
 
     localStorage: new Backbone.LocalStorage "todolist-filtered-backbone"
 
-    initialize: (models, options)->
-      @originalCollection = options.originalCollection
-      @listenTo @originalCollection, 'change', @sync
-      @sync()
+    initialize: ->
+      @filters = {}
 
-    # REVIEW: не очень понятно по названию, что именно синхронизирует метод
-    sync: (title='', done='all')->
+    setOriginalCollection: (originalCollection)->
+      @originalCollection = originalCollection
+      @listenTo @originalCollection, 'change', @refresh
+      @refresh()
+
+    refresh: ->
       models = _.filter @originalCollection.models, (item) =>
-        item.isMatchFilters title, done
+        (@isMatchTitleFilter item, @filters.title) && (@isMatchDoneFilter item, @filters.done)
       @set models
-      @trigger 'sync'
+      @trigger 'refresh'
 
-    # REVIEW: этот метод не используется
-    # Все методы 3 метода можно заменить одним setFilters,
-    # принимающий объекто в качестве параметров
-    # Так же выразительно, но более гибко и расширяемо
-    # setFilters {title: 'Наввание'}
-    # setFilters {done: true}
-    # setFilters {title: 'Абыр Валг',done: true}
-    setTitleFilter: (title)->
-      @sync title
+    isMatchTitleFilter: (item, titleFilter='')->
+      return true if not titleFilter.length
+      title = (item.get 'title').toLowerCase()
+      titleFilter = titleFilter.toLowerCase()
+      (title.indexOf titleFilter) >= 0
 
-    setDoneFilter: (done)->
-      @sync null, done
+    isMatchDoneFilter: (item, doneFilter='all')->
+      return true if doneFilter == 'all'
+      ('' + item.get 'done') == '' + doneFilter
 
-    setFilters: (title='', done='all')->
-      @sync title, done
+    setFilters: (filters)->
+      @filters = filters
+      @refresh()
