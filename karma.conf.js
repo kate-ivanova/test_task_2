@@ -10,21 +10,23 @@ module.exports = function(config) {
     plugins: [
      'karma-requirejs',
      'karma-jasmine',
+     'karma-jasmine-jquery',
      'karma-sinon',
      'karma-mocha',
      'karma-coffee-preprocessor',
-     'karma-chrome-launcher'
+     'karma-chrome-launcher',
+     'karma-coverage',
     ],
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['requirejs', 'sinon', 'jasmine'],
+    frameworks: ['requirejs', 'sinon', 'jasmine-jquery', 'jasmine'],
 
     // list of files / patterns to load in the browser
     files: [
-      'app/scripts/test-main.coffee',
+      'test/test-main.coffee',
       {pattern: 'bower_components/**/*.js', included: false, watched: false},
-      {pattern: 'app/scripts/**/*.coffee', included: false},
+      {pattern: 'app/scripts/**/*.coffee', included: false}
     ],
 
     // list of files to exclude
@@ -35,9 +37,11 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '**/*.coffee': ['coffee']
+      '**/*.coffee': ['coffee'],
+      'app/scripts/model/**/!(*.test).coffee': ['coverage'],
+      'app/scripts/collection/**/!(*.test).coffee': ['coverage'],
+      'app/scripts/view/**/!(*.test).coffee': ['coverage'],
     },
-
     // preprocess coffeeScript
     coffeePreprocessor: {
       // options passed to the coffee compiler
@@ -50,11 +54,19 @@ module.exports = function(config) {
         return path.replace(/\.coffee$/, '.js')
       }
     },
-
+    coverageReporter: {
+      // specify a common output directory
+      dir: 'test/coverage',
+      reporters: [
+        // reporters not supporting the `file` property
+        { type: 'html', subdir: '.' },
+        { type: 'text'}
+      ]
+    },
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['dots','progress', 'coverage'],
 
     // web server port
     port: 9876,

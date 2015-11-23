@@ -9,6 +9,7 @@ define (require, exports, module) ->
   # REVIEW: да и деление на прочие виджеты тоже не вполне оправдано,
   # даваай положим все вместе и назовем components ;)
   # Всё кроме страниц
+
   TodoListView = Backbone.Epoxy.View.extend
     events:
       'click [data-js-todo-title]': 'showItemPage'

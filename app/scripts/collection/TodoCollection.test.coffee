@@ -19,7 +19,7 @@ define (require, exports, module) ->
       @storageTodos.model = @todoModelStub
       sinon.stub @todos, 'fetch', =>
         @todos.set @storageTodos.models
-      sinon.stub @todos, 'yield', =>
+      sinon.stub @todos, 'postData', =>
         @storageTodos.set @todos.models
 
     it 'should be defined', ->

@@ -15,9 +15,9 @@ define (require, exports, module) ->
 
     change: ->
       @trigger 'change'
-      @yield()
+      @postData()
 
-    yield: ->
+    postData: ->
       @sync 'update', this
 
 

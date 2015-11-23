@@ -12,12 +12,12 @@ define (require, exports, module) ->
     # REVIEW: хорошо
     # REVIEW: раз уж ты их засунула в ui, то $ им уже не нужен
     ui:
-      $id: '[data-js-todo-id]'
-      $title: '[data-js-todo-title]'
-      $done: '[data-js-todo-done]'
-      $editTitleInput: '[data-js-todo-edit-title]'
-      $buttonDelete: '[data-js-todo-delete]'
-      $buttonEdit: '[data-js-todo-edit]'
+      id: '[data-js-todo-id]'
+      title: '[data-js-todo-title]'
+      done: '[data-js-todo-done]'
+      editTitleInput: '[data-js-todo-edit-title]'
+      buttonDelete: '[data-js-todo-delete]'
+      buttonEdit: '[data-js-todo-edit]'
 
     events:
       'click [data-js-todo-done]': 'onDoneClick'
@@ -48,17 +48,17 @@ define (require, exports, module) ->
 
     onEditClick: ->
       # REVIEW: эти строчки дублируются ниже, было бы круто обощить это
-      @ui.$title.toggleClass 'hidden', true
-      @ui.$editTitleInput.toggleClass 'hidden', false
+      @ui.title.toggleClass 'hidden', true
+      @ui.editTitleInput.toggleClass 'hidden', false
 
     onEditTitleKeypress: (e)-> @changeTitle() if (e.keyCode == 13)
 
     onEditTitleBlur: -> @changeTitle()
 
     changeTitle: ->
-      @model.changeTitle @ui.$editTitleInput.val()
-      @ui.$title.toggleClass 'hidden', false
-      @ui.$editTitleInput.toggleClass 'hidden', true
+      @model.changeTitle @ui.editTitleInput.val()
+      @ui.title.toggleClass 'hidden', false
+      @ui.editTitleInput.toggleClass 'hidden', true
 
     onDoneClick: (e)-> @model.toggle()
 
