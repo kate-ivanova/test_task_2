@@ -1,11 +1,12 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
+  TodoItemViewTemplate = require 'jade!TodoItemView.jade'
 
   $ = Backbone.$
 
   TodoItemView = Backbone.Epoxy.View.extend
-    template: $('#todoItem').html()
+    template: TodoItemViewTemplate()
 
     className: 'todo-item'
 

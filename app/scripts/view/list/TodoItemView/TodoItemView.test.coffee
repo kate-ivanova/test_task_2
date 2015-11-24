@@ -3,12 +3,6 @@ define (require, exports, module) ->
 
 
   describe 'TodoItemView', ->
-    # jasmine.getFixtures().fixturesPath = '/base/scripts/view/list/TodoItemView/'
-    # loadFixtures('TodoItemView.html')
-    beforeAll ->
-      jasmine.getFixtures().fixturesPath = '/base/app/scripts'
-      fxtrs = readFixtures 'view/list/TodoItemView/TodoItemView.html'
-      console.log fxtrs
     beforeEach ->
       # TodoModel stub
       @todoModelStub = sinon.stub()
@@ -18,6 +12,7 @@ define (require, exports, module) ->
       @todoModelStub.returns @model
       # TodoItemView
       @view = new TodoItemView {model: new @todoModelStub}
+      console.log @view.template
     it 'should be defined', ->
       expect(@view).toBeDefined()
     it 'should correctly handle edit click', ->
