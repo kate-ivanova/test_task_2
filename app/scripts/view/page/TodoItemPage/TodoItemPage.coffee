@@ -1,7 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-  TodoItemView = require 'view/list/TodoItemView/TodoItemView'
+  TodoItemView = require 'view/list/TodoListView/TodoListView'
 
   TodoItemPage = Backbone.Epoxy.View.extend
 

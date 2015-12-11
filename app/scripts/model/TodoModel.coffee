@@ -9,8 +9,5 @@ define (require, exports, module) ->
     toggle: ->
       @set done: !@get 'done'
 
-    changeTitle: (newTitle)->
-      @set title: newTitle
-
     validate: (attrs)->
       'cannot have an empty title' if not attrs.title

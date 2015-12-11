@@ -1,5 +1,4 @@
 define (require, exports, module) ->
-  Backbone = require 'backbone'
   TodoModel = require 'model/TodoModel'
   localStorage = require 'backbone.localStorage'
 
@@ -14,13 +13,14 @@ define (require, exports, module) ->
 
     setOriginalCollection: (originalCollection)->
       @originalCollection = originalCollection
-      @listenTo @originalCollection, 'change', @refresh
-      @refresh()
+      @listenTo @originalCollection, 'change', @_refresh
+      @_refresh()
 
-    refresh: ->
-      models = _.filter @originalCollection.models, (item) =>
-        (@isMatchTitleFilter item, @filters.title) && (@isMatchDoneFilter item, @filters.done)
-      @set models
+    _refresh: ->
+      if @originalCollection
+        models = _.filter @originalCollection.models, (item) =>
+          (@isMatchTitleFilter item, @filters.title) && (@isMatchDoneFilter item, @filters.done)
+        @set models
       @trigger 'refresh'
 
     isMatchTitleFilter: (item, titleFilter='')->
@@ -35,4 +35,4 @@ define (require, exports, module) ->
 
     setFilters: (filters)->
       @filters = filters
-      @refresh()
+      @_refresh()

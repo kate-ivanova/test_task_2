@@ -8,14 +8,14 @@ module.exports = function(config) {
     basePath: '',
 
     plugins: [
-     'karma-requirejs',
-     'karma-jasmine',
-     'karma-jasmine-jquery',
-     'karma-sinon',
-     'karma-mocha',
-     'karma-coffee-preprocessor',
-     'karma-chrome-launcher',
-     'karma-coverage',
+      'karma-requirejs',
+      'karma-jasmine',
+      'karma-jasmine-jquery',
+      'karma-sinon',
+      'karma-mocha',
+      'karma-coffee-preprocessor',
+      'karma-chrome-launcher',
+      'karma-coverage',
     ],
 
     // frameworks to use
@@ -25,12 +25,14 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'test/test-main.coffee',
-      {pattern: 'bower_components/!test/*.js', included: false, watched: false},
-      {pattern: 'app/scripts/**/*.coffee', included: false},
+      {pattern: 'bower_components/**/*.js', included: false, watched: false},
+      {pattern: 'app/scripts/**/*.coffee', included: false, watched: true},
+      {pattern: 'app/scripts/**/*.jade', included: false, watched: true},
     ],
 
     // list of files to exclude
     exclude: [
+      'bower_components/**/*test*',
       'app/scripts/main.coffee'
     ],
 
@@ -54,6 +56,7 @@ module.exports = function(config) {
         return path.replace(/\.coffee$/, '.js')
       }
     },
+    // test coverage configiration
     coverageReporter: {
       // specify a common output directory
       dir: 'test/coverage',
@@ -66,7 +69,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['dots','progress', 'coverage'],
+    reporters: ['dots', 'progress', 'coverage'],
 
     // web server port
     port: 9876,
@@ -76,7 +79,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_DEBUG,
+    logLevel: config.LOG_INFO,
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
@@ -84,7 +87,6 @@ module.exports = function(config) {
     // enable / disable restarting karma and executing tests whenever any file changes
     restartOnFileChange: true,
 
-    // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Chrome'],
 

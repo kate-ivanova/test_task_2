@@ -5,13 +5,14 @@ define (require, exports, module) ->
   TodoListView = require 'view/list/TodoListView/TodoListView'
   AddTodoWidget = require 'view/widget/AddTodoWidget/AddTodoWidget'
   FilterTodoWidget = require 'view/widget/FilterTodoWidget/FilterTodoWidget'
+  IndexPageTemplate = require 'jade!view/page/IndexPage/IndexPage'
 
   $ = Backbone.$
 
   IndexPage = Backbone.Epoxy.View.extend
     className: 'app-block'
 
-    template: $('#IndexPage').html()
+    template: IndexPageTemplate()
 
     # круто!
     regions:
