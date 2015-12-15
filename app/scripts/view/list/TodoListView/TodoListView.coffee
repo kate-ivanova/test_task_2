@@ -1,7 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-  TodoItemView = require 'view/list/TodoItemView/TodoItemView'
+  TodoItemViewTemplate = require 'jade!view/list/TodoListView/TodoItemView'
   $ = Backbone.$
 
   # REVIEW: Деление на айтемы и листы на уровне компонентов не очень оправдано
@@ -10,32 +10,60 @@ define (require, exports, module) ->
   # даваай положим все вместе и назовем components ;)
   # Всё кроме страниц
 
+  TodoItemView = Backbone.Epoxy.View.extend
+    template: TodoItemViewTemplate()
+
+    className: 'todo-list--item'
+
+    ui:
+      id: '[data-js-todo-id]'
+      title: '[data-js-todo-title]'
+      done: '[data-js-todo-done]'
+      buttonView: '[data-js-todo-view]'
+      buttonDelete: '[data-js-todo-delete]'
+
+    events:
+      'click [data-js-todo-view]': 'onViewButtonClick'
+      'click [data-js-todo-delete]': 'onDeleteButtonClick'
+
+    bindings:
+      '[data-js-todo-title]': 'text: title'
+      '[data-js-todo-done]': 'checked: done'
+
+    initialize: ->
+      @$el.html @template
+      @render()
+      @_setUi()
+      @listenTo @model, 'change', @render
+      @listenTo @model, 'destroy', @remove
+
+    showItemPage: -> window.common.router.navigate '/items/' + (@model.get 'id'), {trigger: true}
+
+
+    # REVIEW: этот метод используется несколько раз, лучше вынести его в общего родителя
+    _setUi: ->
+      ui = {}
+      _.each @ui, (element, key)=>
+        ui[key] = @$(element)
+      @ui = ui
+
+    onViewButtonClick: -> @showItemPage()
+
+    onDeleteButtonClick: -> @model.destroy()
+
   TodoListView = Backbone.Epoxy.View.extend
     events:
       'click [data-js-todo-title]': 'showItemPage'
 
+    className: 'todo-list'
+
     initialize: ->
       @render()
-      @listenTo @collection, 'sync', @render
+      @listenTo @collection, 'refresh', @render
 
     render: ->
       @$el.html ''
       @collection.each (todoModel)=>
-        @renderTodo todoModel
+        todoItemView = new TodoItemView model: todoModel
+        @$el.append todoItemView.$el
       this
-
-    renderTodo: (todoModel)->
-      todoItemView = new TodoItemView model: todoModel
-      # REVIEW: itemView же уже рендерится при создании
-      todoItemView.render()
-      $todoItemEl = todoItemView.$el
-      # REVIEW: по идее лучше эту строку перенести в render
-      # REVIEW: а этот метод будет более чистым и будет делать толко 1 вещь
-      # REVIEW: возвращать новый объект
-      @$el.append $todoItemEl
-
-    showItemPage: (e) ->
-      # REVIEW: можно же было просто использовать ссылку
-      # REVIEW: да и с parent не очень красиво
-      itemId = $(e.currentTarget).parent().attr 'data-js-todo-id'
-      window.common.router.navigate '/items/' + itemId, {trigger: true}

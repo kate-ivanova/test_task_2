@@ -18,10 +18,6 @@ define (require, exports, module) ->
       @todoModel.toggle()
       expect(@todoModel.get 'done').toEqual not prevDone
 
-    it 'should correctly change title', ->
-      @todoModel.changeTitle 'New title'
-      expect(@todoModel.get 'title').toEqual 'New title'
-
     it 'should not save when title is empty', ->
       eventSpy = sinon.spy()
       @todoModel.listenTo @todoModel, 'invalid', eventSpy

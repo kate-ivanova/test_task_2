@@ -1,16 +1,11 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
+  _Page = require '../_Page'
   require 'backbone.epoxy'
 
-  NotFoundPage = Backbone.Epoxy.View.extend
+  NotFoundPage = _Page.extend
     className: 'not-found-block'
 
     template: $('#NotFoundPage').html()
 
     initialize: -> @$el.html @template
-
-    hide: ->
-      @$el.toggleClass 'hide', true
-
-    show: ->
-      @$el.toggleClass 'hide', false

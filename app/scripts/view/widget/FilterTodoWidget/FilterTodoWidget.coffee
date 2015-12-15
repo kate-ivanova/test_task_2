@@ -1,57 +1,56 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
-
+  common = require 'common'
+  FilterTodoWidgetTemplate = require 'jade!view/widget/FilterTodoWidget/FilterTodoWidget'
   $ = Backbone.$
 
-  FilterTodoWidget = Backbone.Epoxy.View.extend
-    template: $('#FilterTodoWidget').html()
-
-    className: 'filter-todo-widget'
-
-    filters:
+  FilterTodoWidgetModel = Backbone.Model.extend
+    defaults:
       title: ''
       done: 'all'
 
+  FilterTodoWidget = Backbone.Epoxy.View.extend
+    template: FilterTodoWidgetTemplate()
+    className: 'filter-todo-widget'
+
     ui:
-      $title: '[data-js-todo-title]'
-      $done: '[data-js-todo-done]'
+      title: '[data-js-todo-title]'
+      done: '[data-js-todo-done]'
 
     events:
       'input [data-js-todo-title]': 'onTitleInput'
       'change [data-js-todo-done]': 'onDoneChange'
 
     initialize: ->
+      @model = new FilterTodoWidgetModel
       @$el.html @template
       @render()
-      @setUi()
+      @_setUi()
 
-    setUi: ->
+    setFilters: (filters)->
+      _.each _.keys(filters), (key)=>
+        @model.set {"#{key}": filters["#{key}"]}
+        @ui["#{key}"].val filters["#{key}"]
+      @collection.setFilters @model.toJSON()
+      @_updateRoute()
+
+    _setUi: ->
       ui = {}
       _.each @ui, (element, key)=>
         ui[key] = @$(element)
       @ui = ui
 
-    onTitleInput: (e) ->
-      @filters.title = $(e.target).val()
-      @setFilters @filters
-
-    onDoneChange: (e) ->
-      @filters.done = $(e.target).val()
-      @setFilters @filters
-
-    setFilters: (filters)->
-      @filters = filters
-      @collection.setFilters @filters.title, @filters.done
-      @ui.$title.val @filters.title if @filters.title
-      @ui.$done.val @filters.done if @filters.done
-      @updateRoute()
-
-    updateRoute: ->
+    _updateRoute: ->
       routeStr = ''
+      filters = @model.toJSON()
       # REVIEW: string templates! http://coffeescript.org/#strings
-      routeStr += '?title=' + @filters.title if @filters.title
-      if @filters.done and @filters.done != 'all'
+      routeStr += '?title=' + filters.title if filters.title
+      if filters.done and filters.done != 'all'
         routeStr += if routeStr.length then '&' else '?'
-        routeStr += 'done=' + @filters.done
+        routeStr += 'done=' + filters.done
       window.common.router.navigate routeStr
+
+    onTitleInput: (e) -> @setFilters {title: $(e.target).val()}
+
+    onDoneChange: (e) -> @setFilters {done: $(e.target).val()}

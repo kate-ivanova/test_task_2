@@ -4,14 +4,7 @@ define (require, exports, module) ->
 
   describe 'TodoFilteredCollection', ->
     beforeAll ->
-      # TodoModel stub
-      @todoModelStub = sinon.stub()
-      @model = new Backbone.Model
-        title: ''
-        done: false
-      @todoModelStub.returns @model
-
-      # models list for todoCollection stub
+      # models list for todoCollection
       @modelsList = []
       @modelsList.push {'title': 'Title 1'}
       @modelsList.push {'title': 'Title 2'}
@@ -20,40 +13,39 @@ define (require, exports, module) ->
       @modelsList.push {'title': 'Title 341', 'done': true}
       @modelsList.push {'title': 'Title 521', 'done': true}
 
-
     beforeEach ->
-      # TodoCollection stub
-      @todosStub = new TodoCollection @modelsList
-      @todosStub.model = @todoModelStub
-      @todosStub.fetch = -> {}
-      @todosStub.yield = -> {}
+      @todos = new TodoCollection @modelsList
+      @todosFiltered = new TodoFilteredCollection null, {originalCollection: @todos}
 
-      # create new collection
-      @todosFiltered = new TodoFilteredCollection
-      @todosFiltered.model = @todoModelStub
-      @todosFiltered.setOriginalCollection @todosStub
+    afterEach ->
+      delete @todos
+      delete @todosFiltered
+
+    afterAll ->
+      delete @modelsList
 
     it 'should be defined', ->
       expect(@todosFiltered).toBeDefined()
 
     it 'should set originalCollection', ->
-      expect(@todosFiltered.originalCollection).toEqual(@todosStub)
-      expect(@todosFiltered.models).toEqual(@todosStub.models)
+      expect(@todosFiltered.originalCollection).toEqual @todos
+      expect(@todosFiltered.models).toEqual @todos.models
 
     it 'should have actual originalCollection', ->
       prevLength = @todosFiltered.originalCollection.length
-      model = new Backbone.Model {title: 'Title 5213', done: true}
-      @todosStub.add model
-      expect(@todosFiltered.originalCollection.pop().attributes)
-        .toEqual {'title': 'Title 5213', 'done': true}
+      @todos.add {title: 'Title 5213', done: true}
+      title = @todosFiltered.originalCollection.pop().get 'title'
+      done = @todosFiltered.originalCollection.pop().get 'done'
+      expect(title).toEqual 'Title 5213'
+      expect(done).toEqual true
 
     it 'should correctly set filters', ->
       @todosFiltered.setFilters {title: 'title 1'}
-      expect(@todosFiltered.filters).toEqual({title: 'title 1'})
+      expect(@todosFiltered.filters).toEqual {title: 'title 1'}
       @todosFiltered.setFilters {done: true}
-      expect(@todosFiltered.filters).toEqual({done: true})
+      expect(@todosFiltered.filters).toEqual {done: true}
       @todosFiltered.setFilters {title: 'title 1', done: true}
-      expect(@todosFiltered.filters).toEqual({title: 'title 1', done: true})
+      expect(@todosFiltered.filters).toEqual {title: 'title 1', done: true}
 
     it 'should correctly apply filters', ->
       @todosFiltered.setFilters {title: '1'}
@@ -68,12 +60,11 @@ define (require, exports, module) ->
       expect(@todosFiltered.length).toEqual 3
       @todosFiltered.setFilters {title: '1', done: true}
       expect(@todosFiltered.length).toEqual 2
-      @todosFiltered.setFilters {title: 'tiTle 3', done: false}
+      @todosFiltered.setFilters {title: 'title 3', done: false}
       expect(@todosFiltered.length).toEqual 1
 
     it 'should be refresh by changing originalCollection', ->
       @todosFiltered.setFilters {title: '1', done: true}
-      model = new Backbone.Model {title: 'Title 5213', done: true}
-      @todosStub.add model
+      @todos.add {title: 'Title 5213', done: true}
       expect(@todosFiltered.length).toEqual 3
 

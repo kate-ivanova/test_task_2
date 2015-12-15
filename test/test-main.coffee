@@ -11,8 +11,6 @@ allTestFiles = []
     allTestFiles.push normalizedTestModule
   return
 
-# debugger
-
 require.config
   # Karma serves files under /base, which is the basePath from your config file
   baseUrl: '/base/app/scripts/'
@@ -23,6 +21,7 @@ require.config
   # example of using a couple path translations (paths), to allow us to refer to different library dependencies, without using relative paths
   paths:
     'jquery': '../../bower_components/jquery/dist/jquery'
+    'jade': '../../bower_components/require-jade/jade'
     'underscore': '../../bower_components/underscore/underscore'
     'modernizr': '../../bower_components/modernizr/modernizr'
     'backbone': '../../bower_components/backbone/backbone'

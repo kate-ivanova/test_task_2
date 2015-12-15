@@ -1,17 +1,20 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
+  _Page = require '../_Page'
   require 'backbone.epoxy'
+  TodoCollection = require 'collection/TodoCollection'
   TodoFilteredCollection = require 'collection/TodoFilteredCollection'
   TodoListView = require 'view/list/TodoListView/TodoListView'
   AddTodoWidget = require 'view/widget/AddTodoWidget/AddTodoWidget'
   FilterTodoWidget = require 'view/widget/FilterTodoWidget/FilterTodoWidget'
+  IndexPageTemplate = require 'jade!view/page/IndexPage/IndexPage'
 
   $ = Backbone.$
 
-  IndexPage = Backbone.Epoxy.View.extend
+  IndexPage = _Page.extend
     className: 'app-block'
 
-    template: $('#IndexPage').html()
+    template: IndexPageTemplate()
 
     # круто!
     regions:
@@ -25,8 +28,9 @@ define (require, exports, module) ->
         el: '[data-js-todo-list]'
         view: TodoListView
 
-    initialize: ->
+    initialize: (filters)->
       @$el.html @template
+      @collection = new TodoCollection
       @filteredCollection = new TodoFilteredCollection null, originalCollection: @collection
       # set collections for view
       # REVIEW: это лучше передававать в конструктор
@@ -36,6 +40,7 @@ define (require, exports, module) ->
       # render all
       @render()
       @initializeRegions()
+      @regions.filterTodo.setFilters filters if filters
 
     # REVIEW: этот код лучше вынести в общего родителя или создать миксин
     # REVIEW: например так https://coffeescript-cookbook.github.io/chapters/classes_and_objects/mixins
@@ -51,14 +56,3 @@ define (require, exports, module) ->
     renderRegions:->
       _.each @regions, (region)=>
         region.render()
-
-    setAttributes: (filters) ->
-      @regions.filterTodo.setFilters filters if filters
-
-    # этот код повторяется
-    hide: -> @$el.toggleClass 'hide', true
-
-    show: -> @$el.toggleClass 'hide', false
-
-
-

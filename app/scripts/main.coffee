@@ -4,6 +4,7 @@ require.config
     underscore: '../bower_components/underscore/underscore'
     modernizr: '../bower_components/modernizr/modernizr'
     backbone: '../bower_components/backbone/backbone'
+    'jade': '../bower_components/require-jade/jade'
     'backbone.localStorage': '../bower_components/backbone.localStorage/backbone.localStorage'
     'backbone.epoxy': '../bower_components/backbone.epoxy/backbone.epoxy'
 
