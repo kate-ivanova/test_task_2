@@ -19,8 +19,7 @@ define (require, exports, module) ->
 
     beforeEach ->
       @todos = new TodoCollection @modelsList
-      @todosFiltered = new TodoFilteredCollection
-      @todosFiltered.setOriginalCollection @todos
+      @todosFiltered = new TodoFilteredCollection [], {originalCollection: @todos}
       @view = new FilterTodoWidget {collection: @todosFiltered}
       @view.render()
 
@@ -39,6 +38,13 @@ define (require, exports, module) ->
       expect(@view.ui).toBeDefined()
       _.each @view.ui, (value) ->
         expect(value.length).toBeGreaterThan 0
+
+    it 'should correctly set filters', ->
+      filters = {}
+      filters.title = '3'
+      filters.done = 'true'
+      @view.setFilters filters
+      expect(@view.collection.length).toBe 2
 
     it 'should filter on titleFilter input', ->
       title = 'Title 3'

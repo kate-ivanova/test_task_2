@@ -10,16 +10,9 @@ define (require, exports, module) ->
 
     initialize: ->
       @fetch()
-      @listenTo this, 'add', @change
-      @listenTo this, 'remove', @change
+      @listenTo this, 'change add reset remove', @_change
 
-    change: ->
-      @trigger 'change'
-      @postData()
-
-    postData: ->
-      @sync 'update', this
-
-
-
+    _change: (ev)->
+      _.each @models, (model) ->
+        model.save()
 

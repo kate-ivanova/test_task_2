@@ -1,6 +1,7 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
   require 'backbone.epoxy'
+  common = require 'common'
   FilterTodoWidgetTemplate = require 'jade!view/widget/FilterTodoWidget/FilterTodoWidget'
   $ = Backbone.$
 
@@ -27,18 +28,18 @@ define (require, exports, module) ->
       @render()
       @_setUi()
 
-    _setUi: ->
-      ui = {}
-      _.each @ui, (element, key)=>
-        ui[key] = @$(element)
-      @ui = ui
-
-    _setFilters: (filters)->
+    setFilters: (filters)->
       _.each _.keys(filters), (key)=>
         @model.set {"#{key}": filters["#{key}"]}
         @ui["#{key}"].val filters["#{key}"]
       @collection.setFilters @model.toJSON()
       @_updateRoute()
+
+    _setUi: ->
+      ui = {}
+      _.each @ui, (element, key)=>
+        ui[key] = @$(element)
+      @ui = ui
 
     _updateRoute: ->
       routeStr = ''
@@ -50,6 +51,6 @@ define (require, exports, module) ->
         routeStr += 'done=' + filters.done
       window.common.router.navigate routeStr
 
-    onTitleInput: (e) -> @_setFilters {title: $(e.target).val()}
+    onTitleInput: (e) -> @setFilters {title: $(e.target).val()}
 
-    onDoneChange: (e) -> @_setFilters {done: $(e.target).val()}
+    onDoneChange: (e) -> @setFilters {done: $(e.target).val()}

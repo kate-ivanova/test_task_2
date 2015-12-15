@@ -15,8 +15,7 @@ define (require, exports, module) ->
 
     beforeEach ->
       @todos = new TodoCollection @modelsList
-      @todosFiltered = new TodoFilteredCollection
-      @todosFiltered.setOriginalCollection @todos
+      @todosFiltered = new TodoFilteredCollection null, {originalCollection: @todos}
 
     afterEach ->
       delete @todos
@@ -35,8 +34,10 @@ define (require, exports, module) ->
     it 'should have actual originalCollection', ->
       prevLength = @todosFiltered.originalCollection.length
       @todos.add {title: 'Title 5213', done: true}
-      expect(@todosFiltered.originalCollection.pop().attributes)
-        .toEqual {'title': 'Title 5213', 'done': true}
+      title = @todosFiltered.originalCollection.pop().get 'title'
+      done = @todosFiltered.originalCollection.pop().get 'done'
+      expect(title).toEqual 'Title 5213'
+      expect(done).toEqual true
 
     it 'should correctly set filters', ->
       @todosFiltered.setFilters {title: 'title 1'}

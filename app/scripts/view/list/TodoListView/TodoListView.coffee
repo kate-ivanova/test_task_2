@@ -19,17 +19,14 @@ define (require, exports, module) ->
       id: '[data-js-todo-id]'
       title: '[data-js-todo-title]'
       done: '[data-js-todo-done]'
-      editTitleInput: '[data-js-todo-edit-title]'
+      buttonView: '[data-js-todo-view]'
       buttonDelete: '[data-js-todo-delete]'
-      buttonEdit: '[data-js-todo-edit]'
 
     events:
-      'click [data-js-todo-done]': 'onDoneClick'
-      'click [data-js-todo-delete]': 'onDeleteClick'
-      'click [data-js-todo-edit]': 'onEditClick'
+      'click [data-js-todo-view]': 'onViewButtonClick'
+      'click [data-js-todo-delete]': 'onDeleteButtonClick'
 
     bindings:
-      '[data-js-todo-id]': "attr: {'data-js-todo-id': id}"
       '[data-js-todo-title]': 'text: title'
       '[data-js-todo-done]': 'checked: done'
 
@@ -40,6 +37,9 @@ define (require, exports, module) ->
       @listenTo @model, 'change', @render
       @listenTo @model, 'destroy', @remove
 
+    showItemPage: -> window.common.router.navigate '/items/' + (@model.get 'id'), {trigger: true}
+
+
     # REVIEW: этот метод используется несколько раз, лучше вынести его в общего родителя
     _setUi: ->
       ui = {}
@@ -47,24 +47,9 @@ define (require, exports, module) ->
         ui[key] = @$(element)
       @ui = ui
 
-    # _toggleEditMode: ->
-    #   isTitleHidden = @ui.title.hasClass 'hidden'
-    #   @ui.title.toggleClass 'hidden', !isTitleHidden
-    #   @ui.editTitleInput.toggleClass 'hidden', isTitleHidden
+    onViewButtonClick: -> @showItemPage()
 
-    # _changeTitle: ->
-    #   @model.changeTitle @ui.editTitleInput.val()
-    #   @_toggleEditMode()
-
-    onEditClick: ->
-
-    onDoneClick: -> @model.toggle()
-
-    onDeleteClick: -> @model.destroy()
-
-    # onEditTitleBlur: -> @_changeTitle()
-
-    # onEditTitleKeypress: (e)-> @_changeTitle() if (e.keyCode == 13)
+    onDeleteButtonClick: -> @model.destroy()
 
   TodoListView = Backbone.Epoxy.View.extend
     events:
@@ -74,7 +59,7 @@ define (require, exports, module) ->
 
     initialize: ->
       @render()
-      @listenTo @collection, 'sync', @render
+      @listenTo @collection, 'refresh', @render
 
     render: ->
       @$el.html ''
@@ -82,9 +67,3 @@ define (require, exports, module) ->
         todoItemView = new TodoItemView model: todoModel
         @$el.append todoItemView.$el
       this
-
-    # showItemPage: (e) ->
-    #   # REVIEW: можно же было просто использовать ссылку
-    #   # REVIEW: да и с parent не очень красиво
-    #   itemId = $(e.currentTarget).parent().attr 'data-js-todo-id'
-    #   window.common.router.navigate '/items/' + itemId, {trigger: true}

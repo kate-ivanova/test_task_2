@@ -1,0 +1,25 @@
+.todo-item
+  margin-top: 15px
+  max-width: 370px
+  margin: auto
+  height: 35px
+  background-color: #F7F4F7
+  margin-top: 5px
+  &--done
+    margin: 12px 10px 0 !important
+  .title
+    display: inline-block
+  .edit-button, .save-button, .cancel-button
+    display: block
+    float: right
+    margin-right: 5px
+    margin-top: 5px
+  .edit-title
+    width: 250px
+  .edit-title, .save-button, .cancel-button
+    display: none
+  &__edit
+    .edit-title, .save-button, .cancel-button
+      display: inline-block
+    .title, .edit-button
+      display: none

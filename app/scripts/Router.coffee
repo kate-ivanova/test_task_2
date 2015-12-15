@@ -1,9 +1,9 @@
 define (require, exports, module) ->
   Backbone = require 'backbone'
-  # REVIEW: не думаю, что в этом замечательном приложении нужны неймспейсы
-  # REVIEW: думаю, ты со мной согласишься, когда начнёшь писать тесты к нему
-  # REVIEW: давай избавимся от common
-  common = require 'common'
+  TodoCollection = require 'collection/TodoCollection'
+  IndexPage = require 'view/page/IndexPage/IndexPage'
+  TodoItemPage = require 'view/page/TodoItemPage/TodoItemPage'
+  NotFoundPage = require 'view/page/NotFoundPage/NotFoundPage'
 
   getUrlArgs = ()->
     res = {}
@@ -26,11 +26,13 @@ define (require, exports, module) ->
     index: (str)->
       urlArgs = getUrlArgs()
       # REVIEW: оочень длинные строки
-      window.common.app.showPage window.common.app.pages.IndexPage, urlArgs
+      window.common.app.showPage(new IndexPage urlArgs)
 
     items: (id)->
-      window.common.app.showPage window.common.app.pages.TodoItemPage, id
+      collection = new TodoCollection
+      model = collection.get id
+      window.common.app.showPage(new TodoItemPage model)
 
     notFoundPage: (other)->
-      window.common.app.showPage window.common.app.pages.NotFoundPage
+      window.common.app.showPage(new NotFoundPage)
 
